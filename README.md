@@ -1,4 +1,4 @@
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.akvone/update-image-maven-plugin)](https://search.maven.org/artifact/com.github.akvone/update-image-maven-plugin)
+
 
 # Update image Maven plugin
 ## What is it used for?
@@ -16,23 +16,22 @@ Actually, the plugin itself automates steps 2 and 3.
 ## How to use 
 ### With maven
 #### What you really need:
-* Type: `mvn clean package -DskipTests com.github.akvone:update-image-maven-plugin:update` to make full update
+* Type: `mvn clean package -DskipTests com.github.strakhova:update-image-maven-plugin:update` to make full update
 
 #### May be useful also 
-* Type: `mvn clean compile jar:jar org.springframework.boot:spring-boot-maven-plugin:repackage com.github.akvone:update-image-maven-plugin:update` 
+* Type: `mvn clean compile jar:jar org.springframework.boot:spring-boot-maven-plugin:repackage com.github.strakhova:update-image-maven-plugin:update` 
   to make full update (fastest command, but works only with Spring Boot projects)
-* Type: `mvn com.github.akvone:update-image-maven-plugin:update` to make partial update (without generating new jar)
-* Type: `mvn com.github.akvone:update-image-maven-plugin:build-push` to make build and push (without generating new jar)
+* Type: `mvn com.github.strakhova:update-image-maven-plugin:update` to make partial update (without generating new jar)
+* Type: `mvn com.github.strakhova:update-image-maven-plugin:build-push` to make build and push (without generating new jar)
 
 ### With Intellij IDEA
 1. Add Configuration
 2. Create Maven Run Configuration
 3. Command line:
-  `-N com.github.akvone:update-image-maven-plugin:update`
+  `-N com.github.strakhova:update-image-maven-plugin:update`
 4. Before launch: 
   `clean package -DskipTests`
-  
-![EXAMPLE](./documentation/images/How%20to.%20IntelliJ%20IDEA.png) 
+ 
 
 
 ## Configuration
@@ -43,17 +42,19 @@ Add required properties
 [See default config](./src/main/resources/config/default.yaml)
 ```
 docker:
-  host: "***" # Already has defaults based on your OS
-  username: "!!!"
-  authorization: "!!!"
+  host: "tcp://127.0.0.1:2375"
+  username: "user121"
+  authorization: "password"
 artifactory:
-  url: "!!!"
-  repository: "!!!"
+  url: "artifactory.xxxx.com:xxx/"
+  repository: "xx.docker.dev/"
 cloudProvider:
-  type: "openshift" # currently, OpenShift is supported only
+  type: "kubernetes"
   url: "***"
-  namespace: "***"
-  authorizationToken: "***" # get it from OpenShift (Bearer token)
+  namespace: "dev1"
+  deployment: "some-service"
+  authorizationToken: "***"
+  configPath: "c:\\Users\\user121\\.kube\\config"
 ```
 
 Note that properties with "!!!" are required and "***" are optional.

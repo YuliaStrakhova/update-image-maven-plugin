@@ -9,15 +9,15 @@ import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1ContainerStatus;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1PodList;
+import io.kubernetes.client.openapi.models.*;
 import io.kubernetes.client.util.Config;
 import io.kubernetes.client.util.PatchUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class KubernetesPatcher {
@@ -61,21 +61,35 @@ public class KubernetesPatcher {
         Thread.sleep(5000);
 
         for (int i = 0; i < 30; i++) {
-            Thread.sleep(5000);
+            Thread.sleep(7000);
             V1PodList list =
                     coreApi.listNamespacedPod(props.namespace, null, null, null, null, ls, null, null, null, null);
 
+            log.info("\n");
             list.getItems().stream().forEach(
                     item -> {
-                        item.getStatus().getContainerStatuses().stream().forEach(
-                                c -> log.info(c.getName() + " " + c.getImage() + " is ready?: " + c.getReady())
+                        log.info(
+                                item.getSpec().getContainers().stream().map(
+                                                c -> "    " + " " + c.getImage())
+                                        .collect(Collectors.joining(","))
+                                        +
+                                        "  pod.ready=" +
+                                        item.getStatus().getContainerStatuses().stream().map(
+                                                s -> s.getReady().toString()
+                                        ).collect(Collectors.joining(","))
                         );
-
-                        if (item.getStatus().getContainerStatuses().stream().
-                                allMatch(V1ContainerStatus::getReady))
-                            return;
                     }
             );
+
+            if (list.getItems().stream()
+                    .map(V1Pod::getStatus)
+                    .map(V1PodStatus::getContainerStatuses)
+                    .flatMap(Collection::stream)
+                    .allMatch(V1ContainerStatus::getReady)
+            ) {
+                return;
+            }
+
         }
         throw new RuntimeException("Some problem with deployment");
     }
