@@ -6,5 +6,7 @@ public class OpenShiftProperties {
   public String namespace;
   public String appName;
   public String authorization;
+  public String configPath;
+  public String deployment;
 
 }

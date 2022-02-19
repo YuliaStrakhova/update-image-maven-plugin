@@ -31,6 +31,7 @@ public class DockerBuilder {
     this.projectName = projectName;
     this.propsHolder = propsHolder;
     fullRepositoryUrl = getArtifactoryProp("url") + getArtifactoryProp("repository");
+    log.info("fullRepositoryUrl: " + fullRepositoryUrl);
 
     DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
         .withDockerHost(getDockerProp("host"))
@@ -52,8 +53,11 @@ public class DockerBuilder {
   }
 
   public String run() throws IOException, InterruptedException {
+    log.info("Start build Image");
     String imageId = buildImage();
+    log.info("Start tag Image");
     String tag = tagImage(imageId);
+    log.info("Start push Image");
     String imagePath = pushImage(tag);
 
     docker.close();
@@ -69,6 +73,7 @@ public class DockerBuilder {
       }
     };
     String imagePath = fullRepositoryUrl + projectName;
+    log.info("imagePath: " + imagePath);
     docker.pushImageCmd(imagePath)
         .withTag(tag)
         .exec(pc)
@@ -79,6 +84,7 @@ public class DockerBuilder {
 
   private String tagImage(String imageId) {
     String tag = LocalDateTime.now().format(DateTimeFormatter.ofPattern(TAG_DATE_TIME_PATTERN));
+    log.info("tag: " + tag);
     docker.tagImageCmd(imageId, fullRepositoryUrl + projectName, tag).exec();
 
     return tag;

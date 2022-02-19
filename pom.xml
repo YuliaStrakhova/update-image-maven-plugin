@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.akvone</groupId>
+  <groupId>com.github.strakhova</groupId>
   <artifactId>update-image-maven-plugin</artifactId>
   <version>0.6.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
@@ -18,21 +18,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <developers>
-    <developer>
-      <name>Kirill Vialkov</name>
-      <email>akvone@mail.ru</email>
-      <organization>com.github.akvone</organization>
-      <organizationUrl>https://github.com/akvone</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <connection>scm:git:git://github.com/akvone/update-image-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://github.com:akvone/update-image-maven-plugin.git</developerConnection>
-    <url>https://github.com/akvone/update-image-maven-plugin/tree/master</url>
-  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,9 +44,16 @@
     <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+    <client-java.version>10.0.0</client-java.version>
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>io.kubernetes</groupId>
+      <artifactId>client-java</artifactId>
+      <version>${client-java.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
