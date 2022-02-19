@@ -53,6 +53,8 @@ public class ImageUpdater {
                 e.printStackTrace();
             } catch (ApiException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         } else {
             log.info("Start to patch OpenShift deployment with an image: {}", imageLocation);

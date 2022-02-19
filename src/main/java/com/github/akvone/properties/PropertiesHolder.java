@@ -45,7 +45,7 @@ public class PropertiesHolder {
         log.warn("Some problems with file {}", yamlFile);
         throw new IllegalStateException("Can't create PropertiesHolder.", e);
       } else {
-        log.info("Some problems with optional config file {}. Try to proceed without it {}", yamlFile, e);
+        log.info("Some problems with optional config file {}. Try to proceed without it ", yamlFile);
         return createEmptyConfiguration();
       }
     }
